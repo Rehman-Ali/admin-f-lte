@@ -60,7 +60,7 @@ const onSubmit = (e) => {
     };
 
 
-    fetch(`${SERVER_URL}api/news/news/`, {
+    fetch(`${SERVER_URL}api/news/`, {
       method: 'post',
       headers: {
         Accept: 'application/json',

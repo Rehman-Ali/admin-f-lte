@@ -5,6 +5,7 @@ import Footer from "../../../components/Footer";
 import {useSelector, useDispatch} from 'react-redux';
 import {SERVER_URL} from '../../../utils/config';
 import {useAlert} from 'react-alert';
+import axios from 'axios';
 
 const AddNews = props => {
   const alert = useAlert();
@@ -12,12 +13,24 @@ const AddNews = props => {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
- 
+  const [images, setImages] = useState('')
   // for error handling
   const [titleError, setTitleError] = useState('');
   const [locationError, setLocationError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const user = JSON.parse(localStorage.getItem("user"));
+
+
+  const onFileChange =(event) => {
+    let images = [];
+        for (var i = 0; i < event.target.files.length; i++) {
+              images[i] = event.target.files.item(i);
+          }
+          images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif|PNG|JPEG|JPG)$/))
+          // this.setState({ images, message })
+    setImages(images)
+  }
+  
 
 
 const onChangeTitle= (e) =>{
@@ -53,32 +66,48 @@ const onSubmit = (e) => {
   } else {
     
 
-    const data = {
-        title: title,
-        location: location,
-        description: description,
-    };
+
+    var formData = new FormData();
+    const uploaders = images.map(image => {
+          const data = new FormData();
+          data.append("image", image, image.name);
+          data.append('title',title)
+          data.append('location',location)
+          data.append('description',description)
+            // Make an AJAX upload request using Axios`
+            return axios.post(`${SERVER_URL}api/news/`, data)
+            .then(response => {
+              alert.success(response.message)
+
+          })
+        });
+
+    // const data = {
+    //     title: title,
+    //     location: location,
+    //     description: description,
+    // };
 
 
-    fetch(`${SERVER_URL}api/news/`, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-       'X-Auth-Token': user.token,
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(json => {
-        alert.success(json.message)
-        // setLoading(false)
-        props.history.push('/news')
-      })
-      .catch(error => {
+    // fetch(`${SERVER_URL}api/news/`, {
+    //   method: 'post',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //    'X-Auth-Token': user.token,
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     alert.success(json.message)
+    //     // setLoading(false)
+    //     props.history.push('/news')
+    //   })
+    //   .catch(error => {
         
-        alert.error('Invalid Activity Try Again!')
-      });
+    //     alert.error('Invalid Activity Try Again!')
+    //   });
 
   
 
@@ -188,10 +217,12 @@ const onSubmit = (e) => {
                                 image
                               </label>
                               <input
-                                type="file"
+                                // type="file"
                                 className="form-control"
                                 id="exampleInputPassword1"
-                                placeholder="Password"
+                                // placeholder="Password"
+                              type="file" onChange={onFileChange}
+
                               />
                             </div>
                           </div>

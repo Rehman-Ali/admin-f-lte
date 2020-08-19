@@ -5,7 +5,7 @@ import Footer from "../../../components/Footer";
 import {useSelector, useDispatch} from 'react-redux';
 import {SERVER_URL} from '../../../utils/config';
 import {useAlert} from 'react-alert';
-
+import axios from 'axios';
 const EditNews = props => {
  const newsData = useSelector((state) => state.news.editNews);
  const alert = useAlert();
@@ -13,12 +13,24 @@ const EditNews = props => {
   const [title, setTitle] = useState(newsData.length > 0 ? newsData[0].title : '');
   const [location, setLocation] = useState(newsData.length > 0 ? newsData[0].location : '');
   const [description, setDescription] = useState(newsData.length > 0 ? newsData[0].description : '');
- 
+   const [images, setImages] = useState('');
   // for error handling
   const [titleError, setTitleError] = useState('');
   const [locationError, setLocationError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const user = JSON.parse(localStorage.getItem("user"));
+
+
+  
+const onFileChange =(event) => {
+	let images = [];
+    	for (var i = 0; i < event.target.files.length; i++) {
+            images[i] = event.target.files.item(i);
+        }
+        images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif|PNG|JPEG|JPG)$/))
+        // this.setState({ images, message })
+	setImages(images)
+}
 
 
 const onChangeTitle= (e) =>{
@@ -54,32 +66,46 @@ const onSubmit = (e) => {
   } else {
     
 
-    const data = {
-        title: title,
-        location: location,
-        description: description,
-    };
+    var formData = new FormData();
+    const uploaders = images.map(image => {
+            const data = new FormData();
+          data.append("image", image, image.name);
+          data.append('title',title)
+          data.append('location',location)
+          data.append('description',description)
+            // Make an AJAX upload request using Axios`
+            return axios.post(`${SERVER_URL}api/news/news/`+ newsData[0]._id, data)
+            .then(response => {
+            alert.success(response.msg)
+          })
+        });
+
+    // const data = {
+    //     title: title,
+    //     location: location,
+    //     description: description,
+    // };
 
 
-    fetch(`${SERVER_URL}api/news/news/`+ newsData[0]._id, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-       'X-Auth-Token': user.token,
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => response.json())
-      .then(json => {
-        alert.success(json.msg)
-        // setLoading(false)
-        props.history.push('/news')
-      })
-      .catch(error => {
+    // fetch(`${SERVER_URL}api/news/news/`+ newsData[0]._id, {
+    //   method: 'post',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //    'X-Auth-Token': user.token,
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     alert.success(json.msg)
+    //     // setLoading(false)
+    //     props.history.push('/news')
+    //   })
+    //   .catch(error => {
         
-        alert.error('Invalid Activity Try Again!')
-      });
+    //     alert.error('Invalid Activity Try Again!')
+    //   });
 
   
 
@@ -189,10 +215,11 @@ const onSubmit = (e) => {
                                 image
                               </label>
                               <input
-                                type="file"
-                                className="form-control"
-                                id="exampleInputPassword1"
-                                placeholder="Password"
+                                // type="file"
+                              className="form-control"
+                              id="exampleInputPassword1"
+                              type="file" onChange={onFileChange}
+                                
                               />
                             </div>
                           </div>

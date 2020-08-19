@@ -4,7 +4,7 @@ import SideNav from "../../components/SideNav";
 import Footer from "../../components/Footer";
 import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { SERVER_URL } from "../../utils/config";
+import { SERVER_URL, IMAGE_URL } from "../../utils/config";
 import { ALL_COMPAIGN_FAIL, ALL_COMPAIGN_SUCCESS, EDIT_COMPAIGN_SUCCESS } from "../../actions/types";
 import { useAlert } from "react-alert";
 
@@ -167,7 +167,10 @@ const Compaign = () => {
                                 <td>{item.category}</td>
                                 <td>{item.goal_amount}</td>
                                 <td>{item.raised_amount}</td>
-                                <td>{item.image}</td>
+                                <td>
+                              <img src={IMAGE_URL+ item.image} style={{height: '70px', width:'70px'}}/>
+                             </td>
+                           
                                 <td>{item.updated_at}</td>
                                 <td>{item.created_at}</td>
                                 <td>
@@ -311,7 +314,9 @@ const Compaign = () => {
                       <td className="tr">{compaignInfo.category}</td>
                       <td className="tr">{compaignInfo.goal_amount}</td>
                       <td className="tr">{compaignInfo.raised_amount}</td>
-                      <td className="tr">{compaignInfo.image}</td>
+                      <td className="tr">
+                              <img src={IMAGE_URL+ compaignInfo.image} style={{height: '70px', width:'70px'}}/>
+                             </td>
                       <td className="tr">{compaignInfo.created_at}</td>
                       <td className="tr">{compaignInfo.updated_at}</td>
 

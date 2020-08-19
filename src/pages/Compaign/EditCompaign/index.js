@@ -5,6 +5,7 @@ import Footer from "../../../components/Footer";
 import {useSelector, useDispatch} from 'react-redux';
 import {SERVER_URL} from '../../../utils/config';
 import {useAlert} from 'react-alert';
+import axios from 'axios';
 
 const EditCompaign = props => {
   const compaignData = useSelector((state) => state.compaign.editCompaign);
@@ -14,6 +15,7 @@ const EditCompaign = props => {
    const [category, setCategory] = useState(compaignData.length > 0 ? compaignData[0].category : '');
    const [goal_amount, setGoalAmount] = useState(compaignData.length > 0 ? compaignData[0].goal_amount : '');
    const [raised_amount, setRaisedAmount] = useState(compaignData.length > 0 ? compaignData[0].raised_amount : '');
+   const [images, setImages] = useState('')
   
    // for error handling
    const [titleError, setTitleError] = useState('');
@@ -24,6 +26,18 @@ const EditCompaign = props => {
    const user = JSON.parse(localStorage.getItem("user"));
  
  
+
+   const onFileChange =(event) => {
+    let images = [];
+        for (var i = 0; i < event.target.files.length; i++) {
+              images[i] = event.target.files.item(i);
+          }
+          images = images.filter(image => image.name.match(/\.(jpg|jpeg|png|gif|PNG|JPEG|JPG)$/))
+          // this.setState({ images, message })
+    setImages(images)
+  }
+  
+
  const onChangeTitle= (e) =>{
    setTitleError('')
    setTitle(e.target.value);
@@ -62,35 +76,52 @@ const EditCompaign = props => {
     setRaisedAmountError("Please Enter Raised Amount!");
   }  
    else {
-     
  
-     const data = {
-         title: title,
-         category: category,
-         raised_amount: raised_amount,
-         goal_amount: goal_amount
-     };
+    
+    var formData = new FormData();
+     const uploaders = images.map(image => {
+             const data = new FormData();
+           data.append("image", image, image.name);
+           data.append('title',title)
+           data.append('raised_amount',raised_amount)
+           data.append('category',category)
+           data.append('goal_amount',goal_amount)
+             // Make an AJAX upload request using Axios`
+             return axios.post(`${SERVER_URL}api/compaign/compaign/` + compaignData[0]._id, data)
+             .then(response => {
+             console.log('response ', response)
+           })
+         });
+ 
+
+ 
+    //  const data = {
+    //      title: title,
+    //      category: category,
+    //      raised_amount: raised_amount,
+    //      goal_amount: goal_amount
+    //  };
  
  
-     fetch(`${SERVER_URL}api/compaign/compaign/`+ compaignData[0]._id, {
-       method: 'post',
-       headers: {
-         Accept: 'application/json',
-         'Content-Type': 'application/json',
-        'X-Auth-Token': user.token,
-       },
-       body: JSON.stringify(data),
-     })
-       .then(response => response.json())
-       .then(json => {
-         alert.success(json.msg)
-         // setLoading(false)
-         props.history.push('/compaign')
-       })
-       .catch(error => {
+    //  fetch(`${SERVER_URL}api/compaign/compaign/`+ compaignData[0]._id, {
+    //    method: 'post',
+    //    headers: {
+    //      Accept: 'application/json',
+    //      'Content-Type': 'application/json',
+    //     'X-Auth-Token': user.token,
+    //    },
+    //    body: JSON.stringify(data),
+    //  })
+    //    .then(response => response.json())
+    //    .then(json => {
+    //      alert.success(json.msg)
+    //      // setLoading(false)
+    //      props.history.push('/compaign')
+    //    })
+    //    .catch(error => {
          
-         alert.error('Invalid Activity Try Again!')
-       });
+    //      alert.error('Invalid Activity Try Again!')
+    //    });
  
    
  
@@ -212,10 +243,12 @@ const EditCompaign = props => {
                                 Image
                               </label>
                               <input
-                                type="file"
+                                // type="file"
                                 className="form-control"
                                 id="exampleInputEmail1"
                                 // placeholder="Enter email"
+                              type="file" onChange={onFileChange}
+
                               />
                             </div>
                             

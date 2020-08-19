@@ -6,16 +6,16 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SERVER_URL } from "../../utils/config";
 import {
-  ALL_DONATIONPRODUCT_FAIL,
-  ALL_DONATIONPRODUCT_SUCCESS,
-  EDIT_DONATIONPRODUCT_SUCCESS,
+  ALL_DONATIONPRODUCT_REQUEST_FAIL,
+  ALL_DONATIONPRODUCT_REQUEST_SUCCESS,
+  EDIT_DONATIONPRODUCT_REQUEST_SUCCESS,
 } from "../../actions/types";
 import { useAlert } from "react-alert";
 
 const DonationRequest = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  const alldonationProduct = useSelector(
-    (state) => state.donationProduct.allDonationProduct
+  const alldonationProductRequest = useSelector(
+    (state) => state.donationRequest.allDonationRequest
   );
   const dispatch = useDispatch();
   const [donationProductInfo, setDonationProductInfo] = useState("");
@@ -23,10 +23,9 @@ const DonationRequest = () => {
   const [deleteDonationProduct, setDeleteDonationProduct] = useState(false);
   const alert = useAlert();
 
-  console.log("array", alldonationProduct);
-
+ 
   useEffect(() => {
-    fetch(`${SERVER_URL}api/donationProduct/`, {
+    fetch(`${SERVER_URL}api/donationRequest/`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -37,19 +36,19 @@ const DonationRequest = () => {
       .then((response) => response.json())
       .then((json) => {
         dispatch({
-          type: ALL_DONATIONPRODUCT_SUCCESS,
-          payload: json.product,
+          type: ALL_DONATIONPRODUCT_REQUEST_SUCCESS,
+          payload: json.donationRequest,
         });
       })
       .catch((error) => {
         dispatch({
-          type: ALL_DONATIONPRODUCT_FAIL,
+          type: ALL_DONATIONPRODUCT_REQUEST_FAIL,
         });
       });
   }, [deleteDonationProduct]);
 
   const donationProductShowInModal = (item, index) => {
-    fetch(`${SERVER_URL}api/donationProduct/product/` + item._id, {
+    fetch(`${SERVER_URL}api/donationRequest/` + item._id, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -59,7 +58,7 @@ const DonationRequest = () => {
     })
       .then((response) => response.json())
       .then((json) => {
-        setDonationProductInfo(json.product[0]);
+        setDonationProductInfo(json.donationRequest[0]);
       })
       .catch((error) => {
         alert.error("Some Invalid Activity Please Try Again!");
@@ -69,7 +68,7 @@ const DonationRequest = () => {
   };
 
   const removeDonationProduct = (item) => {
-    fetch(`${SERVER_URL}api/donationProduct/product/` + item._id, {
+    fetch(`${SERVER_URL}api/donationRequest/` + item._id, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -79,7 +78,7 @@ const DonationRequest = () => {
     })
       .then((response) => response.json())
       .then((json) => {
-        alert.success("donationProduct deleted successfully!");
+        alert.success("donation Request deleted successfully!");
         setDeleteDonationProduct(!deleteDonationProduct);
       })
       .catch((error) => {
@@ -89,7 +88,7 @@ const DonationRequest = () => {
 
   const editDonationProduct = (item) => {
     dispatch({
-      type: EDIT_DONATIONPRODUCT_SUCCESS,
+      type: EDIT_DONATIONPRODUCT_REQUEST_SUCCESS,
       payload: item,
     });
   };
@@ -102,7 +101,7 @@ const DonationRequest = () => {
         <div className="content-wrapper">
           <section className="content-header">
             <h1>
-              All Donation Product
+              All Donation Request
               <small>Details</small>
             </h1>
             <ol className="breadcrumb">
@@ -111,7 +110,7 @@ const DonationRequest = () => {
                   <i className="fa fa-dashboard" /> Home
                 </a>
               </li>
-              <li className="active">Donation Product</li>
+              <li className="active">Donation Request</li>
             </ol>
           </section>
           {/* Main content */}
@@ -122,8 +121,8 @@ const DonationRequest = () => {
               <div className="col-xs-12">
                 <div className="box ">
                   <div className="box-header">
-                    <h3 className="box-title">All Doantion Product</h3>
-                    <Link
+                    <h3 className="box-title">All Donation Request </h3>
+                    {/* <Link
                       // type="submit"
                       className="btn btn-primary pull-right"
                       style={{ marginRight: "25px" }}
@@ -131,7 +130,7 @@ const DonationRequest = () => {
                       to="/add-donation-product"
                     >
                       Add Product
-                    </Link>
+                    </Link> */}
                   </div>
                   {/* /.box-header */}
                   <div className="box-body scrolltbl">
@@ -141,39 +140,40 @@ const DonationRequest = () => {
                     >
                       <thead>
                         <tr>
-                          <th>Sr no</th>
-                          <th>Name</th>
-                          <th>Category</th>
-                          {/* <th>Image</th>
-                          <th>Amount</th>
-                          <th>Created at</th> */}
+                           <th>ID</th>
+                          <th>Full Name</th>
+                          <th>Phone no</th>
+                          <th>Address</th>
+                          <th>Description</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {alldonationProduct === null ||
-                        alldonationProduct === undefined ||
-                        alldonationProduct.length < 1
+                        {alldonationProductRequest === null ||
+                        alldonationProductRequest === undefined ||
+                        alldonationProductRequest.length < 1
                           ? "no data exist"
-                          : alldonationProduct !== null &&
-                            alldonationProduct !== undefined &&
-                            alldonationProduct.length > 0
-                          ? alldonationProduct.map((item, index) => (
+                          : alldonationProductRequest !== null &&
+                          alldonationProductRequest !== undefined &&
+                          alldonationProductRequest.length > 0
+                          ? alldonationProductRequest.map((item, index) => (
                               <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{item.product_name}</td>
-                                <td>{item.product_category}</td>
+                                <td>{item.name}</td>
+                                <td>{item.phone}</td>
+                                <td>{item.address}</td>
+                                <td>{item.description}</td>
                                 {/* <td>{item.image}</td>
                                 <td>{item.amount}</td>
                                 <td>{item.created_at}</td> */}
                                 <td>
-                                  <Link to="/edit-donation-product">
+                                  {/* <Link to="/edit-donation-product">
                                     <i
                                       className="fa fa-fw fa-pencil"
                                       style={{ color: "green" }}
                                       onClick={() => editDonationProduct(item)}
                                     ></i>
-                                  </Link>
+                                  </Link> */}
                                   <i
                                     className="fa fa-fw fa-eye"
                                     style={{ color: "#3c8dbc" }}
@@ -254,15 +254,7 @@ const DonationRequest = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                        Category
-                      </th>
-                      {/* <th
-                        className="tr"
-                        style={{
-                          verticalAlign: "middle",
-                        }}
-                      >
-                       Image
+                        phone
                       </th>
                       <th
                         className="tr"
@@ -270,7 +262,7 @@ const DonationRequest = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                       Amount
+                       address
                       </th>
                       <th
                         className="tr"
@@ -278,8 +270,31 @@ const DonationRequest = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                       Created at
-                        </th> */}
+                       city
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                       state
+                        </th>
+                        <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                       Country
+                        </th><th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                       Description
+                        </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -288,14 +303,16 @@ const DonationRequest = () => {
                     donationProductInfo !== undefined ? (
                       <tr>
                         <td className="tr">
-                          {donationProductInfo.product_name}
+                          {donationProductInfo.name}
                         </td>
                         <td className="tr">
-                          {donationProductInfo.product_category}
+                          {donationProductInfo.phone}
                         </td>
-                        {/* <td className="tr">{causeInfo.image}</td>
-                      <td className="tr">{causeInfo.amount}</td>
-                          <td className="tr">{causeInfo.created_at}</td> */}
+                        <td className="tr">{donationProductInfo.address}</td>
+                      <td className="tr">{donationProductInfo.city}</td>
+                          <td className="tr">{donationProductInfo.state}</td>
+                          <td className="tr">{donationProductInfo.country}</td>
+                          <td className="tr">{donationProductInfo.description}</td>
                       </tr>
                     ) : (
                       "no data exist with id"

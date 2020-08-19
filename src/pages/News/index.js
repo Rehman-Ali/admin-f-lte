@@ -4,7 +4,7 @@ import SideNav from "../../components/SideNav";
 import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SERVER_URL } from "../../utils/config";
+import { SERVER_URL, IMAGE_URL } from "../../utils/config";
 import {
   ALL_NEWS_FAIL,
   ALL_NEWS_SUCCESS,
@@ -173,7 +173,10 @@ const News = () => {
                                 <td>{item.title}</td>
                                 <td>{item.location}</td>
                                 <td>{item.description}</td>
-                                <td>dummy value</td>
+                                <td>
+                              <img src={IMAGE_URL+ item.image} style={{height: '70px', width:'70px'}}/>
+                             </td>
+                           
                                 <td>{item.created_at}</td>
                                 <td>
                                   <Link to="/news-edit">
@@ -297,7 +300,9 @@ const News = () => {
                         <td className="tr">{newsInfo.title}</td>
                         <td className="tr">{newsInfo.location}</td>
                         <td className="tr">{newsInfo.description}</td>
-                        <td className="tr">dummy value</td>
+                        <td className="tr">
+                              <img src={IMAGE_URL+ newsInfo.image} style={{height: '70px', width:'70px'}}/>
+                             </td>
                         <td className="tr">{newsInfo.created_at}</td>
                       </tr>
                     ) : (

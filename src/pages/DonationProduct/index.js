@@ -4,7 +4,7 @@ import SideNav from "../../components/SideNav";
 import Footer from "../../components/Footer";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SERVER_URL } from "../../utils/config";
+import { SERVER_URL, IMAGE_URL } from "../../utils/config";
 import {
   ALL_DONATIONPRODUCT_FAIL,
   ALL_DONATIONPRODUCT_SUCCESS,
@@ -122,7 +122,7 @@ const DonationProduct = () => {
               <div className="col-xs-12">
                 <div className="box ">
                   <div className="box-header">
-                    <h3 className="box-title">All Doantion Product</h3>
+                    <h3 className="box-title">All Donation Product</h3>
                     <Link
                       // type="submit"
                       className="btn btn-primary pull-right"
@@ -143,7 +143,9 @@ const DonationProduct = () => {
                         <tr>
                           <th>Sr no</th>
                           <th>Name</th>
-                          <th>Category</th>
+                          <th>Image</th>
+                          <th>Description</th>
+                          <th>Status</th>
                           {/* <th>Image</th>
                           <th>Amount</th>
                           <th>Created at</th> */}
@@ -160,13 +162,60 @@ const DonationProduct = () => {
                             alldonationProduct.length > 0
                           ? alldonationProduct.map((item, index) => (
                               <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item.product_name}</td>
-                                <td>{item.product_category}</td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  {index + 1}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  {item.product_name}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  <img
+                                    src={IMAGE_URL + item.product_image}
+                                    style={{ height: "70px", width: "70px" }}
+                                  />
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  {item.product_description}
+                                </td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  {item.status === '1' ? (
+                                    <span style={{ color: "green" }}>
+                                      Active
+                                    </span>
+                                  ) : (
+                                    <span style={{ color: "red" }}>
+                                      Disabled
+                                    </span>
+                                  )}
+                                </td>
                                 {/* <td>{item.image}</td>
                                 <td>{item.amount}</td>
                                 <td>{item.created_at}</td> */}
-                                <td>
+                                <td
+                                  style={{
+                                    verticalAlign: "middle",
+                                  }}
+                                >
                                   <Link to="/edit-donation-product">
                                     <i
                                       className="fa fa-fw fa-pencil"
@@ -210,8 +259,8 @@ const DonationProduct = () => {
       </div>
 
       {/* for modal */}
-      <div className="modal fade" id="modal-default">
-        <div className="modal-dialog" style={{ marginTop: "10%" }}>
+      <div className="modal fade" id="modal-default" >
+        <div className="modal-dialog" style={{ marginTop: "10%" , width:'900px'}}>
           <div
             className="modal-content"
             style={{ borderRadius: "5px", border: "1px solid white" }}
@@ -246,7 +295,7 @@ const DonationProduct = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                        Name
+                        User Name
                       </th>
                       <th
                         className="tr"
@@ -254,7 +303,71 @@ const DonationProduct = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                        Category
+                        Product Name
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Image
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Phone No
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Address
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        City
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        State
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Country
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Status
+                      </th>
+                      <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Product Description
                       </th>
                       {/* <th
                         className="tr"
@@ -287,11 +400,32 @@ const DonationProduct = () => {
                     donationProductInfo !== null &&
                     donationProductInfo !== undefined ? (
                       <tr>
+                        <td className="tr">{donationProductInfo.name}</td>
                         <td className="tr">
                           {donationProductInfo.product_name}
                         </td>
                         <td className="tr">
-                          {donationProductInfo.product_category}
+                          <img
+                            src={IMAGE_URL + donationProductInfo.product_image}
+                            style={{ height: "70px", width: "70px" }}
+                          />
+                        </td>
+                        <td className="tr">{donationProductInfo.phone}</td>
+                        <td className="tr">{donationProductInfo.address}</td>
+                        <td className="tr">{donationProductInfo.city}</td>
+                        <td className="tr">{donationProductInfo.state}</td>
+                        <td className="tr">{donationProductInfo.country}</td>
+                        <td className="tr">{donationProductInfo.status === "1" ? (
+                                    <span style={{ color: "green" }}>
+                                      Active
+                                    </span>
+                                  ) : (
+                                    <span style={{ color: "red" }}>
+                                      Disabled
+                                    </span>
+                                  )}</td>
+                        <td className="tr">
+                          {donationProductInfo.product_description}
                         </td>
                         {/* <td className="tr">{causeInfo.image}</td>
                       <td className="tr">{causeInfo.amount}</td>

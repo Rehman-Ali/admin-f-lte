@@ -11,11 +11,11 @@ const EditDonationProduct = props => {
   const alert = useAlert();
  
   const [name, setName] = useState(donationProductData.length > 0 ? donationProductData[0].product_name : '');
-  const [category, setCategory] = useState(donationProductData.length > 0 ? donationProductData[0].product_category: '');
+  const [status, setStatus] = useState(donationProductData.length > 0 ? donationProductData[0].status: '');
   
   // for error handling
   const [nameError, setNameError] = useState('');
-  const [categoryError, setCategoryError] = useState( '');
+  const [statusError, setStatusError] = useState( '');
   
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -26,9 +26,9 @@ const onChangeName= (e) =>{
   
 }
 
-const onChangeCategory= (e) =>{
-  setCategoryError('')
-  setCategory(e.target.value);
+const onChangeStatus= (e) =>{
+  setStatusError('')
+  setStatus(e.target.value);
   
 }
 // const onChangeDescription= (e) =>{
@@ -46,14 +46,14 @@ const onSubmit = (e) => {
 
   if (name === "") {
     setNameError("Please Enter Name!");
-  } else if (category === "") {
-    setCategoryError("Please Enter Category!");
+  } else if (status === "") {
+    setStatusError("Please Enter Status!");
   } else {
     
 
     const data = {
       product_name: name ,
-      product_category: category,
+      status: status,
         
     };
 
@@ -140,20 +140,20 @@ const onSubmit = (e) => {
                             </div>
                             <div className="form-group">
                               <label htmlFor="exampleInputPassword1">
-                                Category
+                                Status
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
                                 id="exampleInputPassword1"
-                                placeholder="Enter Description"
-                                name="category"
-                                value={category}
-                                onChange={(e) => onChangeCategory(e) }
+                                placeholder="Enter Status"
+                                name="status"
+                                value={status}
+                                onChange={(e) => onChangeStatus(e) }
                               />
                                 <p
                                   style={{ color: "red" }}
-                               >{categoryError}</p> 
+                               >{statusError}</p> 
                           
                             </div>
                             {/* <div className="form-group">

@@ -1,4 +1,6 @@
-import { ALL_DONATIONREQUEST_FAIL, ALL_DONATIONREQUEST_SUCCESS , EDIT_DONATIONREQUEST_SUCCESS} from "../actions/types";
+import { ALL_DONATIONPRODUCT_REQUEST_FAIL,
+  ALL_DONATIONPRODUCT_REQUEST_SUCCESS,
+  EDIT_DONATIONPRODUCT_REQUEST_SUCCESS} from "../actions/types";
 
 const initialState = {
   allDonationRequest: [],
@@ -10,17 +12,17 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case ALL_DONATIONREQUEST_SUCCESS:
+    case ALL_DONATIONPRODUCT_REQUEST_SUCCESS:
       return {
         ...state,
         allDonationRequest: payload,
       };
-    case ALL_DONATIONREQUEST_FAIL:
+    case ALL_DONATIONPRODUCT_REQUEST_FAIL:
       return {
         ...state,
         allDonationRequest: [],
       };
-      case EDIT_DONATIONREQUEST_SUCCESS:
+      case EDIT_DONATIONPRODUCT_REQUEST_SUCCESS:
         return {
           ...state,
           editDonationRequest:[payload] 

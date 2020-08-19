@@ -4,7 +4,7 @@ import SideNav from "../../components/SideNav";
 import Footer from "../../components/Footer";
 import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { SERVER_URL } from "../../utils/config";
+import { SERVER_URL, IMAGE_URL } from "../../utils/config";
 import {
   ALL_PRODUCT_FAIL,
   ALL_PRODUCT_SUCCESS,
@@ -147,9 +147,8 @@ const Product = () => {
                         <th>Sr no</th>
                           <th>Name</th>
                           <th>Category</th>
-                          {/* <th>Image</th>
-                          <th>Amount</th>
-                          <th>Created at</th> */}
+                          <th>Price</th>
+                          <th>Image</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -158,10 +157,15 @@ const Product = () => {
                           ? "No data exist"
                           : allProduct !== null && allProduct.length > 0
                           ? allProduct.map((item, index) => (
-                            <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{item.product_name}</td>
-                            <td>{item.product_category}</td>
+                            <tr style={{verticalAlign:'middle'}} key={index}>
+                            <td style={{verticalAlign:'middle'}} >{index + 1}</td>
+                            <td style={{verticalAlign:'middle'}} >{item.product_name}</td>
+                            <td style={{verticalAlign:'middle'}} >{item.product_category}</td>
+                            <td style={{verticalAlign:'middle'}} >{item.product_price}</td>
+                            <td>
+                              <img src={IMAGE_URL+ item.product_image} style={{height: '70px', width:'70px'}}/>
+                             </td>
+                           
                                 <td>
                                   <Link to="/edit-product">
                                     <i
@@ -209,7 +213,7 @@ const Product = () => {
         <div className="modal-dialog" style={{ marginTop: "10%" }}>
           <div
             className="modal-content"
-            style={{ borderRadius: "5px", border: "1px solid white" }}
+            style={{ borderRadius: "5px", border: "1px solid white", width:'800px' }}
           >
             <div className="modal-header">
               <button
@@ -251,7 +255,7 @@ const Product = () => {
                       >
                        Category
                       </th>
-                      {/* <th
+                       <th
                         className="tr"
                         style={{
                           verticalAlign: "middle",
@@ -265,7 +269,7 @@ const Product = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                       Amount
+                       Price
                       </th>
                       <th
                         className="tr"
@@ -273,9 +277,16 @@ const Product = () => {
                           verticalAlign: "middle",
                         }}
                       >
-                       Created at
-                        </th> */}
-                      
+                       Product Type
+                        </th> 
+                        <th
+                        className="tr"
+                        style={{
+                          verticalAlign: "middle",
+                        }}
+                      >
+                        Description
+                        </th>                      
                     </tr>
                   </thead>
                   <tbody>
@@ -285,9 +296,12 @@ const Product = () => {
                     <tr>
                       <td className="tr">{productInfo.product_name}</td>
                       <td className="tr">{productInfo.product_category}</td>
-                      {/* <td className="tr">{causeInfo.image}</td>
-                      <td className="tr">{causeInfo.amount}</td>
-                          <td className="tr">{causeInfo.created_at}</td> */}
+                      <td className="tr">
+                        <img src={IMAGE_URL +productInfo.product_image } style={{height:'70px', width:'70px'}} />
+                        </td>
+                      <td className="tr">{productInfo.price}</td>
+                          <td className="tr">{productInfo.product_type}</td>
+                          <td className="tr">{productInfo.product_description}</td>
 
                        </tr>
                      ) : "no data exist with id"}

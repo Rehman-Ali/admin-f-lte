@@ -7,6 +7,7 @@ import compaign from './compaign';
 import donationProduct from './donationProduct';
 import donationRequest from './donationRequest';
 import product from './product';
+import volunteer from './volunteer';
 export default combineReducers({
     auth,
     user,
@@ -14,7 +15,8 @@ export default combineReducers({
     compaign,
     donationProduct,
     product,
-    donationRequest
+    donationRequest,
+    volunteer
     
    
 });
